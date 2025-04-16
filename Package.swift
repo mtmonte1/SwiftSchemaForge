@@ -1,32 +1,29 @@
-// swift-tools-version:5.10
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// swift-tools-version:5.10 // Good, matches Swift version used
 import PackageDescription
 
 let package = Package(
-    name: "SwiftSchemaForge",
+    name: "SwiftSchemaForge", // Correct name
     platforms: [
-        .macOS(.v13) // Using macOS 13 as minimum, adjust if needed (e.g., .v14)
+        .macOS(.v13) // Sensible minimum requirement for recent Swift features
     ],
     dependencies: [
-        // Dependency for parsing Swift code
+        // SwiftSyntax: Correctly specified, version aligns with toolchain
         .package(url: "https://github.com/apple/swift-syntax.git", from: "510.0.1"),
-        // Dependency for parsing command-line arguments
+        // ArgumentParser: Correctly specified, reasonable version constraint
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.0")
     ],
     targets: [
-        // Define the executable target
         .executableTarget(
-            name: "SwiftSchemaForge", // The name of your executable module
+            name: "SwiftSchemaForge", // Matches package name
             dependencies: [
-                // Depend on products from the declared package dependencies
+                 // Links to the necessary product modules from the dependencies
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
-                .product(name: "SwiftParser", package: "swift-syntax"),
-                .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                // ---- ADDED THIS LINE ----
-                .product(name: "SwiftDiagnostics", package: "swift-syntax"),
+                .product(name: "SwiftParser", package: "swift-syntax"), // For Parser.parse
+                .product(name: "ArgumentParser", package: "swift-argument-parser"), // For CLI
+                .product(name: "SwiftDiagnostics", package: "swift-syntax"), // Needed for Diagnostic type if we use it
             ]
-            // SPM generally finds Sources/main.swift correctly by default
+             // No need for explicit `path: "Sources"` as structure is standard
         ),
+         // No Test Target Defined yet - this is a potential addition later
     ]
 )
